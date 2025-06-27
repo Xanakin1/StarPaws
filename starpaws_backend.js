@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 const { createCanvas } = require('canvas');
 const astronomy = require('astronomy-engine');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config(); //loser
 
 const app = express();
 app.use(cors());
