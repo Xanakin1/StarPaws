@@ -94,7 +94,6 @@
       box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
     }
 
-    /* Twinkling animation for stars */
     .star {
       animation: twinkle 2s infinite;
     }
@@ -113,9 +112,10 @@
     }
   </style>
 </head>
+
 <body>
   <svg class="starfield" width="100%" height="100%" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Background stars -->
+    <!-- Star SVGs (unchanged) -->
     <circle class="star" cx="10%" cy="20%" r="1" fill="white" opacity="0.9" />
     <circle class="star" cx="30%" cy="10%" r="1.5" fill="white" opacity="0.8" />
     <circle class="star" cx="70%" cy="25%" r="1" fill="#fff" opacity="0.7" />
@@ -150,51 +150,47 @@
   
   <div class="container">
     <h1>Generate Your Pet's Star Map</h1>
-    <form id="star-form">
-      <label for="petName">Pet Name:</label>
-      <input type="text" id="petName" name="petName" required>
-
+    <form id="starForm">
+      <label for="petName">Pet's Name:</label>
+      <input type="text" name="petName" required>
+    
       <label for="adoptionDate">Adoption Date:</label>
-      <input type="date" id="adoptionDate" name="adoptionDate" required>
+      <input type="date" name="adoptionDate" required>
 
       <label for="location">Adoption Location:</label>
-      <input type="text" id="location" name="location" required>
+      <input type="text" name="location" required>
 
-      <label for="email">Your Email:</label>
-      <input type="email" id="email" name="email" required>
-
-      <button type="submit">Create Star Map</button>
-    </form>
+      <label for="ownerEmail">Your Email:</label>
+      <input type="email" name="ownerEmail" required>
+    
+      <button type="submit">Generate Star Map</button>
+    </form>    
   </div>
 
   <script>
-    document.getElementById("star-form").addEventListener("submit", async function (e) {
+    const form = document.getElementById('starForm');
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const petName = document.getElementById("petName").value;
-      const adoptionDate = document.getElementById("adoptionDate").value;
-      const location = document.getElementById("location").value;
-      const email = document.getElementById("email").value;
+      const formData = {
+       petName: form.petName.value,
+       adoptionDate: form.adoptionDate.value, // moved up
+       location: form.location.value,
+       ownerEmail: form.ownerEmail.value
+      };
 
-      const payload = { petName, adoptionDate, location, email };
 
-      try {
-        const response = await fetch("/api/dev-generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
+      const response = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
 
-        const result = await response.json();
-
-        if (response.ok) {
-          alert("✅ Star map sent to your email!");
-        } else {
-          alert("❌ Error: " + result.error);
-        }
-      } catch (error) {
-        alert("❌ An unexpected error occurred.");
-        console.error(error);
+      const session = await response.json();
+      if (session.url) {
+        window.location.href = session.url;
+      } else {
+        alert('Payment could not be initialized.');
       }
     });
   </script>

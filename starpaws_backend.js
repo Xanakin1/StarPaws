@@ -1,13 +1,14 @@
 // StarPaws Backend - Enhanced Implementation with Fixed Star Display and No Overlapping
 // Dependencies: npm install express stripe nodemailer canvas astronomy-engine dotenv cors
 
+require('dotenv').config();
 const express = require('express');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require('nodemailer');
 const { createCanvas } = require('canvas');
 const astronomy = require('astronomy-engine');
 const cors = require('cors');
-require('dotenv').config(); //loser
+console.log("🔑 Stripe key (first 10 chars):", process.env.STRIPE_SECRET_KEY?.slice(0, 10));
 
 const app = express();
 app.use(cors());
@@ -25,21 +26,25 @@ const transporter = nodemailer.createTransport({
 
 // Function to format date with ordinal suffix (e.g., "May 12th, 2012")
 function formatDateWithOrdinal(dateString) {
-  const date = new Date(dateString);
+  // Parse the date string manually to avoid timezone issues
+  const [year, month, day] = dateString.split('-').map(Number);
+  const date = new Date(year, month - 1, day); // month is 0-indexed
+  
   const options = { 
     year: 'numeric', 
     month: 'long', 
-    day: 'numeric' 
+    day: 'numeric',
+    timeZone: 'UTC' // Force UTC to prevent timezone shifts
   };
   
   const formatted = date.toLocaleDateString('en-US', options);
   
   // Add ordinal suffix to day
-  const day = date.getDate();
+  const dayNum = day; // Use the original day from the string
   let suffix = 'th';
-  if (day % 10 === 1 && day !== 11) suffix = 'st';
-  else if (day % 10 === 2 && day !== 12) suffix = 'nd';
-  else if (day % 10 === 3 && day !== 13) suffix = 'rd';
+  if (dayNum % 10 === 1 && dayNum !== 11) suffix = 'st';
+  else if (dayNum % 10 === 2 && dayNum !== 12) suffix = 'nd';
+  else if (dayNum % 10 === 3 && dayNum !== 13) suffix = 'rd';
   
   return formatted.replace(/(\d+)/, `$1${suffix}`);
 }
@@ -613,19 +618,30 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
   ctx.fillText('E', width - 20, height / 2);
   ctx.fillText('W', 20, height / 2);
 
-  // Top-left adoption label with proper date formatting
+  // Top-left adoption label with proper date formatting and line wrapping
   const formattedDate = formatDateWithOrdinal(adoptionDate);
+  const firstLine = `🐾 ${petName}, Adopted Under the Stars`;
+  const secondLine = `   ${formattedDate}`; // Added spaces to align with text after paw print
+
   ctx.font = '18px "Brush Script MT", cursive';
   ctx.fillStyle = '#FFD700'; // Gold
   ctx.textAlign = 'left';
-  ctx.fillText(`🐾 ${petName}, Adopted Under the Stars — ${formattedDate}`, 20, 30);  
 
-  // Optional message
-  if (customMessage) {
-    ctx.textAlign = 'center';
-    ctx.font = 'italic 14px serif';
-    ctx.fillStyle = '#aaaaff';
-    ctx.fillText(customMessage, width / 2, height - 30);
+  // Check if first line would overlap with the "N" (around x=400, y=30)
+  const firstLineWidth = ctx.measureText(firstLine).width;
+  const textStartX = 20;
+  const textY = 30;
+  const northX = width / 2; // 400px
+  const northY = 30;
+
+  // Always draw as two lines now
+  ctx.fillText(firstLine, textStartX, textY);
+  ctx.fillText(secondLine, textStartX, textY + 22); // 22px line height
+
+  // Optional: Check if first line still overlaps and handle if needed
+  if (textStartX + firstLineWidth > northX - 30) {
+    // You might want to use a smaller font or truncate the pet name if it's too long
+    console.warn('Pet name might be overlapping with compass direction');
   }
 
   return canvas.toBuffer('image/png');
@@ -633,7 +649,12 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
 
 app.post('/api/dev-generate', async (req, res) => {
   try {
-    const { petName, adoptionDate, location, email, customMessage } = req.body;
+    const { sessionId } = req.body;
+    const userData = tempUserData[sessionId];
+     if (!userData) return res.status(400).json({ error: 'Session not found.' });
+
+     const { petName, ownerEmail, adoptionDate, location } = userData;
+
 
     if (!location || typeof location !== 'string' || location.trim() === '') {
       return res.status(400).json({ error: 'Location is required and must be a non-empty string.' });
@@ -649,12 +670,12 @@ app.post('/api/dev-generate', async (req, res) => {
     const reading = generateCosmicReading(skyData, petName, adoptionDate);
     
     // Generate both images, passing skyData to cosmic reading image for star display
-    const starMapImage = await generateStarMap(skyData, petName, adoptionDate, customMessage);
+    const starMapImage = await generateStarMap(skyData, petName, adoptionDate);
     const readingImage = await generateCosmicReadingImage(reading, petName, skyData);
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: email,
+      to: ownerEmail,
       subject: `${petName}'s Star Map is Here!`,
       html: `
         <div style="text-align: center; font-family: Georgia, serif; background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 20px; color: #E6E6FA;">
@@ -685,6 +706,40 @@ app.post('/api/dev-generate', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: err.message });
+  }
+});
+
+const tempUserData = {}; // store temporarily using session ID
+
+app.post('/create-checkout-session', async (req, res) => {
+  const { petName, ownerEmail, adoptionDate, location } = req.body;
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: `Custom Star Map for ${petName}`,
+          },
+          unit_amount: 1500, // $15.00
+        },
+        quantity: 1
+      }],
+      success_url: 'http://localhost:3001/success.html?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'http://localhost:3000/star_form.html',
+      metadata: { petName, ownerEmail, adoptionDate, location }
+    });
+
+    // Save user info temporarily using session ID as key
+    tempUserData[session.id] = { petName, ownerEmail, adoptionDate, location };
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.error('Stripe error:', err);
+    res.status(500).json({ error: 'Something went wrong.' });
   }
 });
 
