@@ -728,8 +728,8 @@ app.post('/create-checkout-session', async (req, res) => {
         },
         quantity: 1
       }],
-      success_url: 'http://localhost:3001/success.html?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'http://localhost:3000/star_form.html',
+      success_url: 'https://starpaws.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://starpaws.onrender.com/index.html',
       metadata: { petName, ownerEmail, adoptionDate, location }
     });
 
