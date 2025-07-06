@@ -3,34 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <title>Success | StarPaws</title>
-</head>
-<body>
-  <h1>Thank you for your purchase!</h1>
-  <p>Your personalized star map is being generated and sent to your email.</p>
-
-  <script>
-    async function fetchSessionData() {
-      const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get("session_id");
-
-      if (!sessionId) return;
-
-      await fetch('/generate-star-map', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId })
-      });
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Fredoka&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Fredoka', sans-serif;
+      background: radial-gradient(circle at center, #0a0a23 0%, #000010 100%);
+      color: #E6E6FA;
+      overflow-x: hidden;
     }
 
-    fetchSessionData();
-  </script>
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars.png') repeat;
+      z-index: 0;
+      animation: moveStars 100s linear infinite;
+      opacity: 0.4;
+    }
+
+    @keyframes moveStars {
+      0% { background-position: 0 0; }
+      100% { background-position: -10000px 5000px; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 36px;
+      color: #FFD700;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 40px;
+    }
+
+    .animals {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .animals img {
+      width: 180px;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .animals img:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="container">
+    <h1>Thank you for your purchase! 🐾</h1>
+    <p>Your personalized star map is being generated and sent to your email.</p>
+    <div class="animals">
+      <img src="https://cdn.pixabay.com/photo/2022/08/30/13/37/dog-7423304_1280.png" alt="Astronaut Dog">
+      <img src="https://cdn.pixabay.com/photo/2022/01/10/09/26/cat-6926612_1280.png" alt="Astronaut Cat">
+    </div>
+  </div>
 
   <script>
-    // Extract session ID from URL
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('session_id');
-  
-    // Call backend to get tempUserData from session and trigger email sending
+
     fetch('/api/dev-generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -44,6 +97,5 @@
       console.error('❌ Error sending star map:', err);
     });
   </script>
-  
 </body>
 </html>
