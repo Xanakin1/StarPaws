@@ -745,4 +745,4 @@ app.post('/create-checkout-session', async (req, res) => {
 
 app.listen(process.env.PORT || 3001, () => {
   console.log('StarPaws API server running on port 3001');
-});
+}); 
