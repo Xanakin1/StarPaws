@@ -5,7 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require('nodemailer');
-const { createCanvas } = require('canvas');
+const { createCanvas } = require('@napi-rs/canvas');
 const astronomy = require('astronomy-engine');
 const cors = require('cors');
 console.log("🔑 Stripe key (first 10 chars):", process.env.STRIPE_SECRET_KEY?.slice(0, 10));

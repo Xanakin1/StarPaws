@@ -4,13 +4,13 @@
     "description": "StarPaws - Personalized star maps for your pets",
     "main": "server.js",
     "scripts": {
-        "start": "node starpaws_backend.js"
+        "start": "node starpaws_backend.js",
+        "install": "npm rebuild canvas"
     },
-
     "dependencies": {
+        "@napi-rs/canvas": "^0.1.73",
         "astronomy-engine": "^2.1.19",
         "axios": "^1.6.0",
-        "canvas": "^2.11.2",
         "cors": "^2.8.5",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
