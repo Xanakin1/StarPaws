@@ -7,11 +7,38 @@
     body {
       margin: 0;
       padding: 0;
-      background: #0d1117; /* Closer to your image's background color */
+      background: #0B0B2A; /* Closer to your image's background color */
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 10% 20%, white 1px, transparent 1px),
+        radial-gradient(circle at 80% 80%, white 1px, transparent 1px),
+        radial-gradient(circle at 40% 40%, white 1px, transparent 1px),
+        radial-gradient(circle at 60% 10%, white 1px, transparent 1px),
+        radial-gradient(circle at 90% 50%, white 1px, transparent 1px),
+        radial-gradient(circle at 20% 90%, white 1px, transparent 1px),
+        radial-gradient(circle at 70% 30%, white 1px, transparent 1px),
+        radial-gradient(circle at 30% 70%, white 1px, transparent 1px);
+      background-size: 200px 200px;
+      animation: twinkle 3s linear infinite;
+      z-index: -1;
+    }
+
+    /* Optional: Add a subtle twinkle animation */
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
     }
 
     .illustration {
