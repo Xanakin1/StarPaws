@@ -7,18 +7,20 @@
     body {
       margin: 0;
       padding: 0;
-      background: #000;
+      background-image: url('/space_background.png'); /* extracted background */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
     }
 
     .illustration {
-      width: 90%; /* or 95% instead of 80% */
-      max-width: 900px; /* increase from 700px */
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      width: 90%;
+      max-width: 900px;
+      /* Remove border-radius and box-shadow */
     }
   </style>
 </head>
