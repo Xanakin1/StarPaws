@@ -7,36 +7,19 @@
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #0c0c2e 0%, #1a1a3a 50%, #0a0a1a 100%);
+      background: #0d1117; /* Closer to your image's background color */
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      position: relative;
-    }
-
-    /* Add CSS stars */
-    body::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        radial-gradient(1px 1px at 20px 30px, #fff, transparent),
-        radial-gradient(1px 1px at 40px 70px, #fff, transparent),
-        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
-        radial-gradient(1px 1px at 130px 80px, #fff, transparent);
-      background-repeat: repeat;
-      background-size: 200px 150px;
-      z-index: -1;
     }
 
     .illustration {
       width: 90%;
       max-width: 900px;
-      z-index: 1;
+      /* Make sure border-radius and box-shadow are removed */
+      border-radius: 0;
+      box-shadow: none;
     }
   </style>
 </head>
