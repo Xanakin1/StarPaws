@@ -1,101 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Success | StarPaws</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Fredoka&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Thank You | StarPaws</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Fredoka', sans-serif;
-      background: radial-gradient(circle at center, #0a0a23 0%, #000010 100%);
+      background: radial-gradient(ellipse at bottom, #0a0a23 0%, #000010 100%);
       color: #E6E6FA;
-      overflow-x: hidden;
-    }
-
-    .stars {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/stars.png') repeat;
-      z-index: 0;
-      animation: moveStars 100s linear infinite;
-      opacity: 0.4;
-    }
-
-    @keyframes moveStars {
-      0% { background-position: 0 0; }
-      100% { background-position: -10000px 5000px; }
+      font-family: 'Georgia', serif;
+      text-align: center;
     }
 
     .container {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 60px 20px;
+      padding: 40px 20px;
     }
 
     h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 36px;
       color: #FFD700;
+      font-size: 2.5em;
       margin-bottom: 10px;
     }
 
     p {
-      font-size: 18px;
-      margin-top: 0;
-      margin-bottom: 40px;
+      font-size: 1.2em;
+      margin-bottom: 30px;
     }
 
-    .animals {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
+    .illustration {
+      width: 80%;
+      max-width: 700px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     }
 
-    .animals img {
-      width: 180px;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
-      transition: transform 0.3s ease;
-    }
-
-    .animals img:hover {
-      transform: scale(1.05);
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(white 1px, transparent 0);
+      background-size: 40px 40px;
+      z-index: -1;
     }
   </style>
 </head>
 <body>
   <div class="stars"></div>
   <div class="container">
-    <h1>Thank you for your purchase! 🐾</h1>
+    <h1>Thank you for your purchase!</h1>
     <p>Your personalized star map is being generated and sent to your email.</p>
-    <div class="animals">
-      <img src="https://cdn.pixabay.com/photo/2022/08/30/13/37/dog-7423304_1280.png" alt="Astronaut Dog">
-      <img src="https://cdn.pixabay.com/photo/2022/01/10/09/26/cat-6926612_1280.png" alt="Astronaut Cat">
-    </div>
+    <img src="success_image.png" alt="Cartoon space dog and cat thanking you" class="illustration" />
   </div>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const sessionId = urlParams.get('session_id');
-
-    fetch('/api/dev-generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId })
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log('✅ Star map sent:', data);
-    })
-    .catch(err => {
-      console.error('❌ Error sending star map:', err);
-    });
+  
+    if (sessionId) {
+      fetch('/api/dev-generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      })
+      .then(res => res.json())
+      .then(data => console.log('✅ Star map sent:', data))
+      .catch(err => console.error('❌ Error sending star map:', err));
+    }
   </script>
 </body>
 </html>
