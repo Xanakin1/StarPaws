@@ -417,7 +417,7 @@ async function generateCosmicReadingImage(reading, petName, skyData) {
     let cleanLine = line;
 
     // Check for moon line FIRST
-   let isMoonLine = line.includes('represented') && (line.includes('illuminated') || line.includes('hidden influence'));
+    let isMoonLine = line.includes('Moon') && (line.includes('illuminated') || line.includes('represented') || line.includes('hidden influence'));
 
    // Clean and style tags
    if (line.includes('<b>') && line.includes('</b>')) {
@@ -432,7 +432,7 @@ async function generateCosmicReadingImage(reading, petName, skyData) {
 
    // Set color - moon line takes priority over bold
    if (isMoonLine) {
-     textColor = '#CD853F'; // Dark gray
+     textColor = '#FFD700'; // Dark gray
     } else if (line.includes('<b>')) {
      textColor = '#FFD700'; // Gold for star/planet names  
     } else if (line.includes('<i>')) {
@@ -620,8 +620,8 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
 
   // Top-left adoption label with proper date formatting and line wrapping
   const formattedDate = formatDateWithOrdinal(adoptionDate);
-  const firstLine = `🐾 ${petName}, Adopted Under the Stars`;
-  const secondLine = `   ${formattedDate}`; // Added spaces to align with text after paw print
+  const firstLine = `* ${petName}, Adopted Under the Stars`;
+  const secondLine = `  ${formattedDate}`; // Added spaces to align with text after asterisk 
 
   ctx.font = '18px "Brush Script MT", cursive';
   ctx.fillStyle = '#FFD700'; // Gold
