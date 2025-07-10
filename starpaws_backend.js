@@ -419,26 +419,26 @@ async function generateCosmicReadingImage(reading, petName, skyData) {
     // Check for moon line FIRST
     let isMoonLine = line.includes('Moon') && (line.includes('illuminated') || line.includes('represented') || line.includes('hidden influence'));
 
-   // Clean and style tags
-   if (line.includes('<b>') && line.includes('</b>')) {
-     font = 'bold 18px Georgia, serif';
-     cleanLine = line.replace(/<b>/g, '').replace(/<\/b>/g, '');
+    // Clean and style tags
+    if (line.includes('<b>') && line.includes('</b>')) {
+      font = 'bold 18px Georgia, serif';
+      cleanLine = line.replace(/<b>/g, '').replace(/<\/b>/g, '');
     }
 
-   if (line.includes('<i>') && line.includes('</i>')) {
-     font = 'italic 15px Georgia, serif';
-     cleanLine = line.replace(/<i>/g, '').replace(/<\/i>/g, '');
+    if (line.includes('<i>') && line.includes('</i>')) {
+      font = 'italic 15px Georgia, serif';
+      cleanLine = line.replace(/<i>/g, '').replace(/<\/i>/g, '');
     }
 
-   // Set color - moon line takes priority over bold
-   if (isMoonLine) {
-     textColor = '#FFD700'; // Dark gray
+    // Set color - moon line takes priority over bold
+    if (isMoonLine) {
+      textColor = '#D2B48C'; // Light brownish color
     } else if (line.includes('<b>')) {
-     textColor = '#FFD700'; // Gold for star/planet names  
+      textColor = '#FFD700'; // Gold for star/planet names  
     } else if (line.includes('<i>')) {
-     textColor = '#87CEEB'; // Sky blue for any future italic text
+      textColor = '#87CEEB'; // Sky blue for any future italic text
     } else {
-     textColor = '#E6E6FA'; // Default lavender
+      textColor = '#E6E6FA'; // Default lavender
     }
 
     ctx.font = font;
