@@ -620,7 +620,7 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
 
   // Top-left adoption label with proper date formatting and line wrapping
   const formattedDate = formatDateWithOrdinal(adoptionDate);
-  const firstLine = `🐾 ${petName}, Adopted Under the Stars`;
+  const firstLine = `\u{1F43E} ${petName}, Adopted Under the Stars`;
   const secondLine = `  ${formattedDate}`; // Added spaces to align with text after asterisk 
 
   ctx.font = '18px "Brush Script MT", cursive';
