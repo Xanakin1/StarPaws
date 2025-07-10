@@ -5,7 +5,8 @@ require('dotenv').config();
 const express = require('express');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require('nodemailer');
-const { createCanvas } = require('@napi-rs/canvas');
+const { loadImage } = require('@napi-rs/canvas');
+const { createCanvas, loadImage } = require('@napi-rs/canvas');
 const astronomy = require('astronomy-engine');
 const cors = require('cors');
 console.log("🔑 Stripe key (first 10 chars):", process.env.STRIPE_SECRET_KEY?.slice(0, 10));
@@ -620,7 +621,11 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
 
   // Top-left adoption label with proper date formatting and line wrapping
   const formattedDate = formatDateWithOrdinal(adoptionDate);
-  const firstLine = `<paw> ${petName}, Adopted Under the Stars`;
+  // Load and draw paw image
+  const paw = await loadImage('./public/paw.png');
+  const pawSize = 20;
+  ctx.drawImage(paw, textStartX, textY - pawSize + 5, pawSize, pawSize);
+  const firstLine = `${petName}, Adopted Under the Stars`;
   const secondLine = `  ${formattedDate}`; // Added spaces to align with text after asterisk 
 
   ctx.font = '18px "Brush Script MT", cursive';
@@ -635,7 +640,7 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
   const northY = 30;
 
   // Always draw as two lines now
-  ctx.fillText(firstLine, textStartX, textY);
+  ctx.fillText(firstLine, textStartX + 25, textY); // Offset to account for paw image
   ctx.fillText(secondLine, textStartX, textY + 22); // 22px line height
 
   // Optional: Check if first line still overlaps and handle if needed
