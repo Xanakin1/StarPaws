@@ -394,7 +394,16 @@ async function generateCosmicReadingImage(reading, petName, skyData) {
   ctx.fillStyle = '#FFD700';
   ctx.font = 'bold 28px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`🌟 ${petName}'s Cosmic Reading 🌟`, width / 2, 60);
+  // Load star image
+  const starImage = await loadImage('./public/star.png');
+  const starSize = 24;
+
+  // Draw left star
+  ctx.drawImage(starImage, width / 2 - 200, 36, starSize, starSize);
+  // Draw title text
+  ctx.fillText(`${petName}'s Cosmic Reading`, width / 2, 60);
+  // Draw right star
+  ctx.drawImage(starImage, width / 2 + 120, 36, starSize, starSize);
 
   // Decorative line
   ctx.strokeStyle = '#FFD700';
@@ -473,7 +482,11 @@ async function generateCosmicReadingImage(reading, petName, skyData) {
   ctx.fillStyle = '#FFD700';
   ctx.font = '20px Georgia, serif';
   ctx.textAlign = 'center';
-  ctx.fillText('✨ A Bond Written in the Stars ✨', width / 2, height - 30);
+  // Draw stars around bottom text
+  const bottomStarSize = 20;
+  ctx.drawImage(starImage, width / 2 - 180, height - 45, bottomStarSize, bottomStarSize);
+  ctx.drawImage(starImage, width / 2 + 160, height - 45, bottomStarSize, bottomStarSize);
+  ctx.fillText('A Bond Written in the Stars', width / 2, height - 30);
 
   return canvas.toBuffer('image/png');
 }
