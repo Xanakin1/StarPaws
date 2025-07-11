@@ -396,14 +396,18 @@ async function generateCosmicReadingImage(reading, petName, skyData) {
   ctx.textAlign = 'center';
   // Load star image
   const starImage = await loadImage('./public/star.png');
-  const starSize = 24;
 
-  // Draw left star
-  ctx.drawImage(starImage, width / 2 - 200, 36, starSize, starSize);
+  // Measure the title text to position stars properly
+  const titleText = `${petName}'s Cosmic Reading`;
+  const titleWidth = ctx.measureText(titleText).width;
+  const starSize = 28; // Match text height
+
+  // Draw left star (at edge of text)
+  ctx.drawImage(starImage, width / 2 - titleWidth / 2 - starSize - 10, 60 - starSize + 5, starSize, starSize);
   // Draw title text
-  ctx.fillText(`${petName}'s Cosmic Reading`, width / 2, 60);
-  // Draw right star
-  ctx.drawImage(starImage, width / 2 + 120, 36, starSize, starSize);
+  ctx.fillText(titleText, width / 2, 60);
+  // Draw right star (at edge of text)
+  ctx.drawImage(starImage, width / 2 + titleWidth / 2 + 10, 60 - starSize + 5, starSize, starSize);
 
   // Decorative line
   ctx.strokeStyle = '#FFD700';
@@ -488,10 +492,15 @@ async function generateCosmicReadingImage(reading, petName, skyData) {
   ctx.font = '20px Georgia, serif';
   ctx.textAlign = 'center';
   // Draw stars around bottom text
-  const bottomStarSize = 20;
-  ctx.drawImage(starImage, width / 2 - 180, height - 45, bottomStarSize, bottomStarSize);
-  ctx.drawImage(starImage, width / 2 + 160, height - 45, bottomStarSize, bottomStarSize);
-  ctx.fillText('A Bond Written in the Stars', width / 2, height - 30);
+  // Measure the bottom text to position stars properly
+  const bottomText = 'A Bond Written in the Stars';
+  const bottomTextWidth = ctx.measureText(bottomText).width;
+  const bottomStarSize = 20; // Match text height
+
+  // Draw stars around bottom text
+  ctx.drawImage(starImage, width / 2 - bottomTextWidth / 2 - bottomStarSize - 10, height - 30 - bottomStarSize + 5, bottomStarSize, bottomStarSize);
+  ctx.fillText(bottomText, width / 2, height - 30);
+  ctx.drawImage(starImage, width / 2 + bottomTextWidth / 2 + 10, height - 30 - bottomStarSize + 5, bottomStarSize, bottomStarSize);
 
   return canvas.toBuffer('image/png');
 }
