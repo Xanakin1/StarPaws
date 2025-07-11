@@ -5,7 +5,6 @@ require('dotenv').config();
 const express = require('express');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const nodemailer = require('nodemailer');
-const { loadImage } = require('@napi-rs/canvas');
 const { createCanvas, loadImage } = require('@napi-rs/canvas');
 const astronomy = require('astronomy-engine');
 const cors = require('cors');
