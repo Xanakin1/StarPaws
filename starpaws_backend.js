@@ -441,9 +441,14 @@ async function generateCosmicReadingImage(reading, petName, skyData) {
 
     // Set color - moon line takes priority over bold
     if (isMoonLine) {
-      textColor = '#D2B48C'; // Light brownish color
+      textColor = '#D2B48C'; // Light brownish color for moon text
     } else if (line.includes('<b>')) {
-      textColor = '#FFD700'; // Gold for star/planet names  
+      // Check if this is a moon phase line (bold moon phase names)
+      if (line.includes('Moon') || line.includes('Crescent') || line.includes('Quarter') || line.includes('Gibbous') || line.includes('Full')) {
+        textColor = '#D2B48C'; // Light brownish color for moon phases
+      } else {
+        textColor = '#FFD700'; // Gold for star/planet names
+      }
     } else if (line.includes('<i>')) {
       textColor = '#87CEEB'; // Sky blue for any future italic text
     } else {
