@@ -754,15 +754,10 @@ app.post('/create-checkout-session', async (req, res) => {
       payment_method_types: ['card'],
       mode: 'payment',
       line_items: [{
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: `Custom Star Map for ${petName}`,
-          },
-          unit_amount: 1500, // $15.00
-        },
+        price: 'price_1RjjzjC19kpWbGYzj9N9ITWk',  
         quantity: 1
       }],
+
       success_url: 'https://starpaws.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'https://starpaws.onrender.com/index.html',
       metadata: { petName, ownerEmail, adoptionDate, location }
