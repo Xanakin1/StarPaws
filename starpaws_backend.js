@@ -633,7 +633,7 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
   const firstLine = `${petName}, Adopted Under the Stars`;
   const secondLine = `  ${formattedDate}`; // Added spaces to align with text after asterisk 
 
-  ctx.font = '18px "Lucida Handwriting", "Brush Script MT", "Lucida Calligraphy", "Dancing Script", "Pacifico", cursive, serif';
+  ctx.font = 'italic bold 18px Georgia, serif';
   ctx.fillStyle = '#FFD700'; // Gold
   ctx.textAlign = 'left';
 
