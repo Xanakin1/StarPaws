@@ -613,7 +613,7 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
   ctx.fillStyle = '#dddddd';
   ctx.font = 'bold 16px Arial';
   ctx.textAlign = 'center';
-  ctx.fillText('N', width / 2, 30);
+  ctx.fillText('N', width / 2, 52);
   ctx.fillText('S', width / 2, height - 15);
   ctx.fillText('E', width - 20, height / 2);
   ctx.fillText('W', 20, height / 2);
