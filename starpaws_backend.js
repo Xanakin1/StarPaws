@@ -620,10 +620,16 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
 
   // Top-left adoption label with proper date formatting and line wrapping
   const formattedDate = formatDateWithOrdinal(adoptionDate);
+  
+  // Define text positioning variables FIRST
+  const textStartX = 20;
+  const textY = 30;
+  const pawSize = 20;
+  
   // Load and draw paw image
   const paw = await loadImage('./public/paw.png');
-  const pawSize = 20;
   ctx.drawImage(paw, textStartX, textY - pawSize + 5, pawSize, pawSize);
+  
   const firstLine = `${petName}, Adopted Under the Stars`;
   const secondLine = `  ${formattedDate}`; // Added spaces to align with text after asterisk 
 
@@ -633,8 +639,6 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
 
   // Check if first line would overlap with the "N" (around x=400, y=30)
   const firstLineWidth = ctx.measureText(firstLine).width;
-  const textStartX = 20;
-  const textY = 30;
   const northX = width / 2; // 400px
   const northY = 30;
 
