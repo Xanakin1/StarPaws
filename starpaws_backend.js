@@ -631,9 +631,9 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
   ctx.drawImage(paw, textStartX, textY - pawSize + 5, pawSize, pawSize);
   
   const firstLine = `${petName}, Adopted Under the Stars`;
-  const secondLine = `  ${formattedDate}`; // Added spaces to align with text after asterisk 
+  const secondLine = `${formattedDate}`;
 
-  ctx.font = 'italic bold 18px Georgia, serif';
+  ctx.font = 'italic bold 16px Georgia, serif'; // Reduced from 18px to 16px
   ctx.fillStyle = '#FFD700'; // Gold
   ctx.textAlign = 'left';
 
@@ -642,9 +642,9 @@ async function generateStarMap(skyData, petName, adoptionDate, customMessage) {
   const northX = width / 2; // 400px
   const northY = 30;
 
-  // Always draw as two lines now
+  // Both lines start at same x position for alignment
   ctx.fillText(firstLine, textStartX + 25, textY); // Offset to account for paw image
-  ctx.fillText(secondLine, textStartX, textY + 22); // 22px line height
+  ctx.fillText(secondLine, textStartX + 25, textY + 20); // Same x offset, reduced line height
 
   // Optional: Check if first line still overlaps and handle if needed
   if (textStartX + firstLineWidth > northX - 30) {
