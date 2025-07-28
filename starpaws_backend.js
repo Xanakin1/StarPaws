@@ -751,23 +751,17 @@ app.post('/create-checkout-session', async (req, res) => {
 
   try {
     const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: 'STARPAWS Star Map (Test)',
-            },
-            unit_amount: 1, // this is in cents → $0.01
-          },
-          quantity: 1,
-        },
-      ],
+      payment_method_types: ['card'],
       mode: 'payment',
-      success_url: 'https://yourdomain.com/success',
-      cancel_url: 'https://yourdomain.com/cancel',
-    });
+      line_items: [{
+        price: 'price_1RjjzjC19kpWbGYzj9N9ITWk',  
+        quantity: 1
+      }],
 
+      success_url: 'https://starpaws.onrender.com/success.html?session_id={CHECKOUT_SESSION_ID}',
+      cancel_url: 'https://starpaws.onrender.com/index.html',
+      metadata: { petName, ownerEmail, adoptionDate, location }
+    });
 
 
     // Save user info temporarily using session ID as key
